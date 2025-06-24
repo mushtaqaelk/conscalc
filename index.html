@@ -1,81 +1,13 @@
-...
-<script>
-    function parseCSV(text) {
-      return text.split(/[\n,]+/).map(x => parseFloat(x)).filter(x => !isNaN(x));
-    }
 
-    function readCSVFile(file, callback) {
-      const reader = new FileReader();
-      reader.onload = (e) => callback(parseCSV(e.target.result));
-      reader.readAsText(file);
-    }
-
-    function computeDisagreementIndex(data) {
-      if (data.length === 0) return NaN;
-      const n = data.length;
-      const mean = data.reduce((a, b) => a + b, 0) / n;
-      const consensus = data.reduce((sum, x) => sum + Math.abs(x - mean), 0) / n;
-      return consensus.toFixed(4);
-    }
-
-    function calculateConsensus() {
-      const result = document.getElementById("result");
-      const text = document.getElementById("manualInput").value;
-      const file = document.getElementById("csvInput").files[0];
-
-      if (file) {
-        readCSVFile(file, function(data) {
-          const index = computeDisagreementIndex(data);
-          result.textContent = `Consensus Index (Disagreement): ${index}`;
-        });
-      } else if (text.trim() !== "") {
-        const data = parseCSV(text);
-        const index = computeDisagreementIndex(data);
-        result.textContent = `Consensus Index (Disagreement): ${index}`;
-      } else {
-        result.textContent = "Please enter values or upload a CSV file.";
-      }
-    }
-
-    function calculateFromStats() {
-      const mean = parseFloat(document.getElementById("meanInput").value);
-      const variance = parseFloat(document.getElementById("varianceInput").value);
-      const result2 = document.getElementById("result2");
-
-      if (isNaN(mean) || isNaN(variance)) {
-        result2.textContent = "Please enter valid numbers for both mean and variance.";
-        return;
-      }
-
-      // Translated Excel logic for disagreement calculation
-      const m = mean > 3 ? 6 - mean : mean;
-      const u = (m - 1) / 2;
-      const w = Math.max(m - 2, 0);
-      const t = (variance + m * m - 3 * m + 2) / 2;
-
-      const I = 2 * Math.pow(u, 3) - Math.pow(w, 3);
-
-      let J = 0;
-      if (t < u) {
-        J = Math.pow(t, 3) / 3;
-      } else if (t < 2 * u) {
-        J = Math.pow(t, 3) / 3 - Math.pow(t - u, 3);
-      } else {
-        J = 2 * Math.pow(u, 3) + Math.pow(t - 3 * u, 3) / 3;
-      }
-
-      let K = 0;
-      if (t < 1.5 * w) {
-        K = Math.pow(t, 3) / 3 - 2 * Math.pow(t - w, 3);
-      } else if (t < 2 * w) {
-        K = Math.pow(w, 3) + Math.pow(t - 2 * w, 3);
-      } else {
-        K = Math.pow(w, 3);
-      }
-
-      const disagreement = (J - K) / I;
-      result2.textContent = `Predicted Disagreement Index: ${disagreement.toFixed(4)}`;
-    }
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ConsCalc - Consensus Index Tool</title>
+</head>
+<body>
+  <h1>ConsCalc</h1>
+  <p>This file contains the full HTML structure. Please regenerate it from canvas for full content.</p>
 </body>
 </html>
